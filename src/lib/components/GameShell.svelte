@@ -187,11 +187,15 @@
 			<div class="overlay-card" aria-live="polite">
 				{#if showBoard}
 					<h2>classifica</h2>
+					{#if phase === 'paused'}
+						<p>La tua partita è in pausa. Puoi riprenderla quando vuoi.</p>
+					{/if}
 					<button
-						class="text-button"
+						class="button"
 						onclick={() => {
 							showBoard = false;
-						}}>[← torna al gioco]</button
+							if (phase === 'paused') resume();
+						}}>{phase === 'paused' ? 'Riprendi partita' : '← Torna al gioco'}</button
 					>
 					{#key `${id}-${boardVersion}`}<Leaderboard {id} />{/key}
 					<a class="button secondary" href={resolve('/')}>Menu</a>
@@ -206,7 +210,7 @@
 					{:else}<button class="button" onclick={start} disabled={!ready || starting}
 							>{starting ? 'un attimo…' : ready ? '[ start ]' : 'caricamento…'}</button
 						>{/if}
-					<button class="text-button" onclick={openBoard}>[classifica]</button>
+					<button class="button secondary" onclick={openBoard}>Classifica</button>
 				{:else if phase === 'paused'}
 					<h2>// pausa caffè</h2>
 					<button class="button" onclick={resume}>Riprendi</button>
@@ -216,7 +220,8 @@
 							phase = 'over';
 						}}>Termina e salva</button
 					>
-					<button class="text-button" onclick={openBoard}>[classifica]</button>
+					<button class="button secondary" onclick={openBoard}>Classifica</button>
+					<p class="small">Puoi guardare la classifica senza perdere la partita.</p>
 					<a class="button secondary" href={resolve('/')}>Menu</a>
 				{:else if phase === 'won'}
 					<h2>laurea sbloccata :)</h2>
@@ -255,7 +260,7 @@
 							>{starting ? '…' : 'Riprova'}</button
 						><a class="button secondary" href={resolve('/')}>Menu</a>
 					</div>
-					<button class="text-button" onclick={openBoard}>[classifica]</button>
+					<button class="button secondary" onclick={openBoard}>Classifica</button>
 				{/if}
 				{#if message}<p class="small" role="status">{message}</p>{/if}
 			</div>
