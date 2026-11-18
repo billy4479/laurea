@@ -187,9 +187,6 @@
 			<div class="overlay-card" aria-live="polite">
 				{#if showBoard}
 					<h2>classifica</h2>
-					{#if phase === 'paused'}
-						<p>La tua partita è in pausa. Puoi riprenderla quando vuoi.</p>
-					{/if}
 					<button
 						class="button"
 						onclick={() => {
@@ -221,7 +218,6 @@
 						}}>Termina e salva</button
 					>
 					<button class="button secondary" onclick={openBoard}>Classifica</button>
-					<p class="small">Puoi guardare la classifica senza perdere la partita.</p>
 					<a class="button secondary" href={resolve('/')}>Menu</a>
 				{:else if phase === 'won'}
 					<h2>laurea sbloccata :)</h2>
