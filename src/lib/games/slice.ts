@@ -68,7 +68,7 @@ export class Slice implements Game {
 		const step = dt * Math.min(1.7, 1 + this.elapsed * 0.012);
 		this.spawn -= step;
 		if (this.spawn <= 0) {
-			const count = this.elapsed > 12 ? 3 : 2;
+			const count = Math.min(5, 2 + Math.floor(this.elapsed / 12));
 			for (let i = 0; i < count; i++) {
 				// Start apart, then cross near the top of the arc and fan out again.
 				const x = 95 + i * (170 / (count - 1)) + (this.random() - 0.5) * 16;

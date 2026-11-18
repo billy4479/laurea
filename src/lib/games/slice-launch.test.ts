@@ -6,6 +6,28 @@ function item(y: number, vy: number, bad = false, cut = false) {
 }
 
 describe('slice launches', () => {
+	it.each([
+		[0, 2],
+		[11, 2],
+		[12, 3],
+		[23, 3],
+		[24, 4],
+		[35, 4],
+		[36, 5],
+		[3600, 5]
+	])('launches %i seconds into the game with the expected wave size (%i)', (elapsed, count) => {
+		const game = new Slice(() => 0.5);
+		game.elapsed = elapsed;
+		game.spawn = 0;
+		game.update(1 / 60);
+		expect(game.items).toHaveLength(count);
+		for (const object of game.items) {
+			expect(Number.isFinite(object.x)).toBe(true);
+			expect(object.x).toBeGreaterThan(30);
+			expect(object.x).toBeLessThan(330);
+		}
+	});
+
 	it('throws objects higher into a tall phone screen', () => {
 		const game = new Slice(() => 0.5, 800);
 		game.spawn = 0;
