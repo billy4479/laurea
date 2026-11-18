@@ -148,7 +148,7 @@ footer {
 }
 .game-toolbar {
 	position: absolute;
-	z-index: 2;
+	z-index: 4;
 	top: 0;
 	left: 0;
 	right: 0;
@@ -157,7 +157,7 @@ footer {
 	gap: 12px;
 	padding: calc(4px + env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 4px
 		max(12px, env(safe-area-inset-left));
-	background: #101318e8;
+	background: #101318;
 	font-size: 12px;
 }
 .game-toolbar h1 {
@@ -196,14 +196,14 @@ footer {
 .game-overlay {
 	position: absolute;
 	z-index: 3;
-	top: calc(88px + env(safe-area-inset-top));
+	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
 	display: flex;
 	align-items: center;
-	padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
-	background: #101318f5;
+	padding: calc(64px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom));
+	background: #101318;
 	overflow: auto;
 	overscroll-behavior: contain;
 }
