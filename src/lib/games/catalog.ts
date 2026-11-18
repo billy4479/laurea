@@ -2,7 +2,7 @@ export const games = [
 	{
 		id: 1,
 		title: 'Flappy Laurea',
-		subtitle: 'Un salto. Un esame. Un altro caffè.',
+		subtitle: '',
 		instructions:
 			'Tocca per saltare e passa tra gli esami. Ogni passaggio vale un CFU. Il ritmo aumenta col tempo: la linea rossa segna il traguardo. Non toccare i bordi!',
 		controls: 'Tocca lo schermo · oppure Spazio',

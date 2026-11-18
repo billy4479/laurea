@@ -5,10 +5,6 @@
 
 <svelte:head>
 	<title>laurea.exe</title>
-	<meta
-		name="description"
-		content="Mi sono laureato. Nel dubbio, ho fatto tre giochini. Grazie di essere qui!"
-	/>
 </svelte:head>
 
 <main class="menu page">
@@ -21,10 +17,13 @@
 			{#each games as game (game.id)}
 				<li>
 					<a href={resolve('/g/[id]', { id: String(game.id) })}>[{game.id}] {game.title}</a>
-					<p class="muted">{game.subtitle}<br />Obiettivo: {game.goal} {game.unit}.</p>
+					<p class="muted">
+						{#if game.subtitle}{game.subtitle}<br />{/if}Obiettivo: {game.goal}
+						{game.unit}.
+					</p>
 				</li>
 			{/each}
 		</ol>
 	</nav>
-	<footer>// nessuna voglia di studiare è stata impiegata nella creazione di questa pagina</footer>
+	<footer>Made with poca voglia di studiare e tanto tempo da perdere</footer>
 </main>
