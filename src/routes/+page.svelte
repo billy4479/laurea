@@ -16,7 +16,11 @@
 		<ol class="game-list">
 			{#each games as game (game.id)}
 				<li>
-					<a href={resolve('/g/[id]', { id: String(game.id) })}>[{game.id}] {game.title}</a>
+					<a href={resolve('/g/[id]', { id: String(game.id) })} style:--game-color={game.color}>
+						<span class="game-symbol" aria-hidden="true">{game.symbol}</span>
+						<span class="game-title">{game.title}</span>
+						<span class="game-arrow" aria-hidden="true">→</span>
+					</a>
 				</li>
 			{/each}
 		</ol>

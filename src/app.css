@@ -92,15 +92,33 @@ footer,
 	padding: 0;
 	margin: 0;
 }
-.game-list li {
-	margin-bottom: 24px;
+.game-list li + li {
+	margin-top: 10px;
 }
 .game-list a {
-	font-size: 12px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	min-height: 58px;
+	padding: 12px 14px;
+	border: 1px solid var(--line);
+	color: inherit;
+	text-decoration: none;
 }
-.game-list p {
-	margin: 8px 0 0;
-	font-size: 12px;
+.game-list a:hover {
+	background: #242d38;
+}
+.game-symbol,
+.game-arrow {
+	color: var(--game-color);
+}
+.game-symbol {
+	width: 32px;
+	font-size: 22px;
+	text-align: center;
+}
+.game-title {
+	flex: 1;
 }
 footer {
 	margin-top: 32px;
