@@ -248,7 +248,6 @@
 									>{saving ? '…' : 'Salva'}</button
 								>
 							</div>
-							<p class="small muted">Nome e punteggio saranno pubblici.</p>
 						</form>
 					{/if}
 					<div class="result-actions">
