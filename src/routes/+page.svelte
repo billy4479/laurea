@@ -13,11 +13,7 @@
 
 <main class="menu page">
 	<h1>laurea.exe<span class="cursor" aria-hidden="true">_</span></h1>
-	<p class="muted">// matematica, codice e cose rimandate a domani</p>
-	<p>
-		Alla fine mi sono laureato.<br />Questi giochini sono un piccolo ricordo. Grazie di essere qui
-		:)
-	</p>
+	<p class="muted">// matematica, AI, bocconi <s>e bocchini</s></p>
 
 	<nav aria-label="Scegli un gioco">
 		<p class="menu-prompt">Scegli il tuo esame:</p>
