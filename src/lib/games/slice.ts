@@ -53,7 +53,7 @@ export class Slice implements Game {
 		for (const item of this.items) {
 			if (!item.cut && segmentDistance(item, this.previous, input) < 30) {
 				item.cut = true;
-				if (item.bad) this.lives--;
+				if (item.bad) this.lives = Math.max(0, this.lives - 1);
 				else this.score += 10;
 			}
 		}
@@ -64,29 +64,32 @@ export class Slice implements Game {
 	update(dt: number) {
 		if (this.over) return;
 		this.elapsed += dt;
-		this.spawn -= dt;
+		// Speed up the whole simulation, preserving the height of each arc.
+		const step = dt * Math.min(1.7, 1 + this.elapsed * 0.012);
+		this.spawn -= step;
 		if (this.spawn <= 0) {
 			const count = this.elapsed > 12 ? 3 : 2;
 			for (let i = 0; i < count; i++) {
-				const x = 65 + this.random() * 230;
+				// Start apart, then cross near the top of the arc and fan out again.
+				const x = 95 + i * (170 / (count - 1)) + (this.random() - 0.5) * 16;
 				this.items.push({
 					x,
 					y: this.height + 40,
-					vx: (180 - x) * 0.45 + (this.random() - 0.5) * 70,
-					vy: -510 - this.random() * 110,
+					vx: (180 - x) / (1.05 + this.random() * 0.15),
+					vy: -680 - this.random() * 100,
 					bad: this.random() < 0.22,
 					kind: Math.floor(this.random() * 3),
 					cut: false
 				});
 			}
-			this.spawn = Math.max(0.8, 1.6 - this.elapsed * 0.006);
+			this.spawn = 1.6;
 		}
 		for (const item of this.items) {
-			item.vy += 650 * dt;
-			item.x += item.vx * dt;
-			item.y += item.vy * dt;
-			if (!item.cut && !item.bad && item.y > this.height + 60 && item.vy > 0) {
-				this.lives--;
+			item.vy += 650 * step;
+			item.x += item.vx * step;
+			item.y += item.vy * step;
+			if (!item.cut && !item.bad && item.y > this.height + 30 && item.vy > 0) {
+				this.lives = Math.max(0, this.lives - 1);
 				item.cut = true;
 			}
 		}
