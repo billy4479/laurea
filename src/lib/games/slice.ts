@@ -1,13 +1,4 @@
-import {
-	colors,
-	HEIGHT,
-	rounded,
-	text,
-	type Game,
-	type Input,
-	type Point,
-	type Painter
-} from './types';
+import { colors, HEIGHT, rounded, type Game, type Input, type Point, type Painter } from './types';
 
 type Treat = {
 	x: number;
@@ -99,7 +90,6 @@ export class Slice implements Game {
 		this.over = this.lives <= 0;
 	}
 	draw(ctx: Painter) {
-		text(ctx, 'UN TAGLIO NETTO CON GLI ESAMI.', 180, 110, 12, '#586473');
 		for (const item of this.items) {
 			const { x, y } = item;
 			if (item.bad) {
