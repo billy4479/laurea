@@ -11,8 +11,9 @@ import {
 } from './types';
 
 import { drawGateLabels } from './flappy-labels';
+import { gameInfo } from './catalog';
 
-type Gate = { x: number; gap: number; passed: boolean; label: string };
+type Gate = { x: number; gap: number; passed: boolean; label: string; finish?: boolean };
 export class Flappy implements Game {
 	score = 0;
 	lives = 1;
@@ -38,13 +39,16 @@ export class Flappy implements Game {
 		this.velocity += 730 * dt;
 		this.y += this.velocity * dt;
 		this.spawn -= dt;
-		const speed = Math.min(165, 102 + this.score * 2);
+		// Ramp up with play time, keeping the endless mode controllable.
+		const speed = Math.min(240, 102 + this.elapsed * 1.5);
 		if (this.spawn <= 0) {
+			const index = this.gateCount++;
 			this.gates.push({
 				x: WIDTH + 10,
 				gap: 155 + this.random() * (this.height - 320),
 				passed: false,
-				label: ['ANALISI', 'ALGEBRA', 'DEADLINE', 'NaN'][this.gateCount++ % 4]
+				label: ['ANALISI', 'ALGEBRA', 'DEADLINE', 'NaN'][index % 4],
+				finish: index + 1 === gameInfo(1).goal
 			});
 			this.spawn = 2.1;
 		}
@@ -67,12 +71,25 @@ export class Flappy implements Game {
 		if (this.over) this.lives = 0;
 	}
 	draw(ctx: Painter) {
-		text(ctx, '∫ procrastinazione dt = domani', 180, 110, 12, '#586473');
-		text(ctx, '∀ ε > 0, manca sempre poco', 185, this.height - 70, 12, '#586473');
 		for (const g of this.gates) {
 			rounded(ctx, g.x, -12, 60, g.gap - 91 + 12, colors.green);
 			rounded(ctx, g.x, g.gap + 91, 60, this.height - g.gap - 91 + 12, colors.green);
 			drawGateLabels(ctx, g.x, g.gap, this.height, g.label);
+			if (g.finish) {
+				// This is exactly the edge that awards the last CFU at x = 85.
+				const x = g.x + 60;
+				for (let y = 0; y < this.height; y += 28) {
+					ctx.line(
+						[
+							{ x, y },
+							{ x, y: Math.min(y + 16, this.height) }
+						],
+						'#ff5252',
+						3
+					);
+				}
+				text(ctx, 'LAUREA', x + 14, this.height / 2, 12, '#ff5252', Math.PI / 2);
+			}
 		}
 		ctx.circle(85, this.y, 17, colors.gold);
 		cap(ctx, 85, this.y - 17, 21);
