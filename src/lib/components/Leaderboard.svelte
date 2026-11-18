@@ -43,7 +43,4 @@
 			{/each}
 		</ol>
 	{/if}
-	<p class="small muted">
-		Una classifica per gioco. A parità di punti, chi arriva prima resta davanti.
-	</p>
 </section>
