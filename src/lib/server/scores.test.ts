@@ -63,12 +63,12 @@ describe('public leaderboard', () => {
 		first.close();
 		expect(store(path).list(3)[0]).toMatchObject({ name: 'Torta', score: 200 });
 	});
-	it('returns only the top 20 entries', () => {
+	it('returns only the top 10 entries', () => {
 		const db = store();
 		for (let i = 1; i <= 25; i++)
 			db.submit({ token: db.start(1, now), game: 1, name: `Ospite ${i}`, score: i }, now + 60_000);
-		expect(db.list(1)).toHaveLength(20);
+		expect(db.list(1)).toHaveLength(10);
 		expect(db.list(1)[0].score).toBe(25);
-		expect(db.list(1)[19].score).toBe(6);
+		expect(db.list(1)[9].score).toBe(16);
 	});
 });

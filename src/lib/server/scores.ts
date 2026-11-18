@@ -74,7 +74,7 @@ export class Scores {
 	list(game: GameId): Entry[] {
 		return this.db
 			.prepare(
-				'SELECT name, score, created FROM scores WHERE game = ? ORDER BY score DESC, created ASC, id ASC LIMIT 20'
+				'SELECT name, score, created FROM scores WHERE game = ? ORDER BY score DESC, created ASC, id ASC LIMIT 10'
 			)
 			.all(game) as Entry[];
 	}

@@ -27,7 +27,7 @@
 </script>
 
 <section class="leaderboard" aria-label="Classifica pubblica">
-	<p class="eyebrow">I PRIMI DELLA CLASSE · TOP 20</p>
+	<p class="eyebrow">I PRIMI DELLA CLASSE</p>
 	{#if loading}<p role="status">Un attimo, cerco il libretto…</p>
 	{:else if message}<p role="alert">{message}</p>
 		<button class="button secondary" onclick={() => load()}>Riprova</button>
