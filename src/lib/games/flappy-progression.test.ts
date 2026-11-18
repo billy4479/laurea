@@ -24,6 +24,47 @@ function distanceAt(elapsed: number, score = 0) {
 }
 
 describe('Flappy progression', () => {
+	it('keeps a fixed column spacing at every speed, including frame overshoot', () => {
+		for (const elapsed of [0, 30, 120]) {
+			for (const dt of [1 / 60, 1 / 30, 0.08]) {
+				const game = new Flappy(() => 0.5);
+				game.elapsed = elapsed;
+				game.gates = [{ x: 370 - 214.2, gap: 280, passed: false, label: 'ANALISI' }];
+				for (let frame = 0; frame < 40; frame++) {
+					game.y = 280;
+					game.velocity = 0;
+					game.update(dt);
+					expect(game.over).toBe(false);
+					for (let i = 1; i < game.gates.length; i++) {
+						expect(game.gates[i].x - game.gates[i - 1].x).toBeCloseTo(214.2, 8);
+					}
+				}
+			}
+		}
+	});
+
+	it('spawns columns more frequently as the world speeds up', () => {
+		function firstInterval(elapsed: number) {
+			const game = new Flappy(() => 0.5);
+			game.elapsed = elapsed;
+			const born: number[] = [];
+			let previous = game.gates.at(-1);
+			for (let frame = 0; frame < 240; frame++) {
+				game.y = 280;
+				game.velocity = 0;
+				game.update(1 / 60);
+				const newest = game.gates.at(-1);
+				if (newest && newest !== previous) {
+					born.push(frame / 60);
+					previous = newest;
+				}
+			}
+			expect(born.length).toBeGreaterThanOrEqual(2);
+			return born[1] - born[0];
+		}
+		expect(firstInterval(120)).toBeLessThan(firstInterval(0));
+	});
+
 	it('accelerates with elapsed time, not score, and caps endless-mode speed', () => {
 		expect(distanceAt(30)).toBeGreaterThan(distanceAt(0));
 		expect(distanceAt(60)).toBeGreaterThan(distanceAt(30));

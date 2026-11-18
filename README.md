@@ -8,7 +8,7 @@ BigBlue ha una griglia nativa di 8×12 pixel: il testo usa corpi di 12 o 24 pixe
 
 ## I QR già stampati
 
-- `/g/1`: **Flappy Laurea**, tap o Spazio per saltare. La velocità aumenta gradualmente col tempo, fino a un limite per mantenere giocabile la modalità infinita. Vinci a 12 CFU attraversando la linea rossa tratteggiata, sul bordo finale del dodicesimo esame.
+- `/g/1`: **Flappy Laurea**, tap o Spazio per saltare. La velocità aumenta gradualmente col tempo, fino a un limite per mantenere giocabile la modalità infinita. La distanza tra le colonne resta fissa: aumentando la velocità, gli esami arrivano più spesso. Vinci a 12 CFU attraversando la linea rossa tratteggiata, sul bordo finale del dodicesimo esame.
 - `/g/2`: **La corsa alla laurea**, tre corsie, swipe, pulsanti o frecce. Vinci a 180 punti; i caffè valgono +10, gli ostacoli costano una delle tre vite.
 - `/g/3`: **Taglia la sessione**, trascina per tagliare torte, cappelli e confetti. Esami e codice rossi non vanno tagliati. Tre vite, vittoria a 200 punti.
 - `/`: menu comune. Tutte le pagine sono raggiungibili direttamente, senza passare dalla home.

@@ -14,6 +14,7 @@ import { drawGateLabels } from './flappy-labels';
 import { gameInfo } from './catalog';
 
 type Gate = { x: number; gap: number; passed: boolean; label: string; finish?: boolean };
+const GATE_SPACING = 102 * 2.1;
 export class Flappy implements Game {
 	score = 0;
 	lives = 1;
@@ -21,7 +22,7 @@ export class Flappy implements Game {
 	y = 250;
 	velocity = 0;
 	elapsed = 0;
-	spawn = 0;
+	spawn = 0; // Remaining world pixels until the next gate.
 	gates: Gate[] = [];
 	private gateCount = 0;
 	constructor(
@@ -38,23 +39,25 @@ export class Flappy implements Game {
 		this.elapsed += dt;
 		this.velocity += 730 * dt;
 		this.y += this.velocity * dt;
-		this.spawn -= dt;
 		// Ramp up with play time, keeping the endless mode controllable.
 		const speed = Math.min(240, 102 + this.elapsed * 1.5);
-		if (this.spawn <= 0) {
+		const distance = speed * dt;
+		for (const gate of this.gates) gate.x -= distance;
+		this.spawn -= distance;
+		while (this.spawn <= 0) {
 			const index = this.gateCount++;
 			this.gates.push({
-				x: WIDTH + 10,
+				// Preserve spacing even when a frame overshoots the spawn point.
+				x: WIDTH + 10 + this.spawn,
 				gap: 155 + this.random() * (this.height - 320),
 				passed: false,
 				label: ['ANALISI', 'ALGEBRA', 'DEADLINE', 'NaN'][index % 4],
 				finish: index + 1 === gameInfo(1).goal
 			});
-			this.spawn = 2.1;
+			this.spawn += GATE_SPACING;
 		}
 		const halfGap = 91;
 		for (const gate of this.gates) {
-			gate.x -= speed * dt;
 			if (!gate.passed && gate.x + 60 < 85) {
 				this.score++;
 				gate.passed = true;
