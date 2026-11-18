@@ -38,13 +38,18 @@ class PhaserPainter implements Painter {
 		this.graphics.strokePoints(points);
 	}
 	text(value: string, x: number, y: number, size: number, color: string) {
+		// BigBlue's native grid is 8×12. Avoid fractional font sizes and fake bold.
+		size = Math.max(12, Math.round(size / 12) * 12);
+		const resolution = Math.max(1, Math.ceil(this.scene.cameras.main.zoom));
 		let label = this.labels[this.used++];
 		if (!label) {
 			label = this.scene.add
-				.text(0, 0, '', { fontFamily: 'LaureaMono, monospace', fontStyle: 'bold' })
+				.text(0, 0, '', { fontFamily: 'BigBlueTerminal, monospace', resolution })
 				.setOrigin(0.5, 0.8);
+			label.texture.setFilter(Phaser.Textures.FilterMode.LINEAR);
 			this.labels.push(label);
 		}
+		if (label.style.resolution !== resolution) label.setResolution(resolution);
 		if (label.style.fontSize !== `${size}px` || label.style.color !== color) {
 			label.setStyle({ fontSize: `${size}px`, color });
 		}
@@ -59,6 +64,8 @@ export function mountGame(parent: HTMLElement, id: GameId, onFrame: (game: Game)
 	let active = false;
 	let accumulator = 0;
 	let dragging = false;
+	let observer: ResizeObserver | undefined;
+	const density = Math.min(3, window.devicePixelRatio || 1);
 	class ArcadeScene extends Phaser.Scene {
 		private painter!: PhaserPainter;
 		create() {
@@ -68,6 +75,17 @@ export function mountGame(parent: HTMLElement, id: GameId, onFrame: (game: Game)
 				this.cameras.main.centerOn(WIDTH / 2, height / 2);
 			};
 			resize();
+			// RESIZE mode uses CSS pixels for the backing canvas. Manage physical
+			// pixels explicitly instead, letting Phaser map touch coordinates back.
+			observer = new ResizeObserver(() => {
+				const dpr = Math.min(3, window.devicePixelRatio || 1);
+				const width = Math.max(1, Math.round(parent.clientWidth * dpr));
+				const height = Math.max(1, Math.round(parent.clientHeight * dpr));
+				if (this.scale.zoom !== 1 / dpr) this.scale.setZoom(1 / dpr);
+				if (this.scale.width !== width || this.scale.height !== height)
+					this.scale.resize(width, height);
+			});
+			observer.observe(parent);
 			this.scale.on('resize', resize);
 			this.events.once('shutdown', () => this.scale.off('resize', resize));
 			this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
@@ -113,11 +131,11 @@ export function mountGame(parent: HTMLElement, id: GameId, onFrame: (game: Game)
 	const phaser = new Phaser.Game({
 		type: Phaser.AUTO,
 		parent,
-		width: parent.clientWidth,
-		height: parent.clientHeight,
+		width: Math.round(parent.clientWidth * density),
+		height: Math.round(parent.clientHeight * density),
 		backgroundColor: '#101318',
 		scene: ArcadeScene,
-		scale: { mode: Phaser.Scale.RESIZE },
+		scale: { mode: Phaser.Scale.NONE, zoom: 1 / density },
 		input: { keyboard: false, activePointers: 1 },
 		render: { antialias: false, pixelArt: true, roundPixels: true },
 		audio: { noAudio: true },
@@ -139,6 +157,7 @@ export function mountGame(parent: HTMLElement, id: GameId, onFrame: (game: Game)
 			if (active) model.input(input);
 		},
 		destroy() {
+			observer?.disconnect();
 			phaser.destroy(true);
 		}
 	};

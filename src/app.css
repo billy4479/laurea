@@ -1,15 +1,15 @@
 @font-face {
-	font-family: 'LaureaMono';
-	src: url('/fonts/mono.ttf') format('truetype');
+	font-family: 'BigBlueTerminal';
+	src: url('/fonts/bigblue-terminal-plus.ttf') format('truetype');
 	font-display: swap;
 }
 
 :root {
-	font-family: 'LaureaMono', monospace;
+	font-family: 'BigBlueTerminal', monospace;
 	color: #d8dee9;
 	background: #101318;
 	color-scheme: dark;
-	font-synthesis: weight;
+	font-synthesis: none;
 	--muted: #929baa;
 	--line: #39414e;
 	--accent: #9ece6a;
@@ -45,7 +45,8 @@ button:disabled {
 }
 h1,
 h2 {
-	font-size: 20px;
+	font-size: 24px;
+	font-weight: normal;
 	line-height: 1.4;
 	margin: 0 0 16px;
 }
@@ -56,7 +57,7 @@ p {
 .page {
 	width: min(600px, calc(100% - 32px));
 	margin: 28px auto;
-	font-size: 14px;
+	font-size: 12px;
 }
 .muted,
 footer,
@@ -87,8 +88,7 @@ footer,
 	margin-bottom: 24px;
 }
 .game-list a {
-	font-size: 16px;
-	font-weight: bold;
+	font-size: 12px;
 }
 .game-list p {
 	margin: 8px 0 0;
@@ -134,7 +134,7 @@ footer {
 	position: fixed;
 	inset: 0;
 	overflow: hidden;
-	font-size: 14px;
+	font-size: 12px;
 	background: #101318;
 }
 .phaser-host {
@@ -145,7 +145,6 @@ footer {
 .phaser-host canvas {
 	display: block;
 	touch-action: none;
-	image-rendering: pixelated;
 }
 .game-toolbar {
 	position: absolute;
@@ -188,7 +187,7 @@ footer {
 	pointer-events: none;
 }
 .hud strong {
-	font-size: 18px;
+	font-size: 24px;
 }
 .lives {
 	color: #f7768e;
@@ -224,7 +223,7 @@ footer {
 	margin-top: 12px;
 }
 .final-score {
-	font-size: 28px;
+	font-size: 24px;
 	margin-bottom: 16px;
 }
 .final-score span {
@@ -253,7 +252,7 @@ footer {
 	min-width: 0;
 	width: 100%;
 	padding: 8px;
-	font-size: 16px;
+	font-size: 24px;
 	border: 1px solid var(--line);
 	background: #171d25;
 	color: #d8dee9;

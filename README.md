@@ -1,8 +1,10 @@
 # Laurea, all’ultimo minuto
 
-Un piccolo ricordo della festa: tre giochi 2D per browser mobile, con tema scuro, font monospace e grafica geometrica essenziale. Font IBM Plex Mono incluso nell’app (licenza in `static/fonts/OFL.txt`), nessun servizio di font esterno e niente decorazioni: un menu di link numerati e giochi a tutto schermo, con punteggio e comandi sovrapposti.
+Un piccolo ricordo della festa: tre giochi 2D per browser mobile, con tema scuro, font monospace e grafica geometrica essenziale. Font BigBlue TerminalPlus di VileR incluso senza modifiche nell’app (CC BY-SA 4.0, licenza in `static/fonts/LICENSE.txt`, [fonte originale](https://int10h.org/blog/2015/12/bigblue-terminal-oldschool-fixed-width-font/)), nessun servizio di font esterno e niente decorazioni: un menu di link numerati e giochi a tutto schermo, con punteggio e comandi sovrapposti.
 
 I giochi occupano tutta l’area disponibile nel browser, senza colonne o scroll della pagina. Sui telefoni alti il campo si estende in verticale; un cambio di orientamento ridimensiona la scena senza tagliare gli oggetti o azzerare la partita. La barra del browser rimane sotto il controllo del browser stesso.
+
+BigBlue ha una griglia nativa di 8×12 pixel: il testo usa corpi di 12 o 24 pixel, senza grassetto sintetico. Il canvas segue la densità del display (fino a 3×) e le texture del testo sono rasterizzate alla scala effettiva della camera, per evitare di ingrandire scritte a bassa risoluzione. Il ridimensionamento mantiene corretti anche i controlli touch.
 
 ## I QR già stampati
 

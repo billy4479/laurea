@@ -46,7 +46,7 @@
 		lives = id === 1 ? 1 : 3;
 		Promise.all([
 			import('$lib/games/phaser-client'),
-			document.fonts.load('14px LaureaMono').catch(() => [])
+			document.fonts.load('12px BigBlueTerminal').catch(() => [])
 		])
 			.then(([{ mountGame }]) => {
 				if (disposed) return;
