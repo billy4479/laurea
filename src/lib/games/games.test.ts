@@ -21,7 +21,7 @@ describe('tall phone screens', () => {
 		game.spawn = 100;
 		game.obstacles = [{ lane: 1, y: 460, coffee: false, label: 'ESAME' }];
 		game.update(1 / 60);
-		expect(game.lives).toBe(3);
+		expect(game.lives).toBe(1);
 		game.obstacles = [{ lane: 1, y: 700, coffee: true, label: '' }];
 		game.update(1 / 60);
 		expect(game.bonus).toBe(10);
@@ -80,20 +80,20 @@ describe('La corsa alla laurea', () => {
 		game.input({ type: 'right', x: 0, y: 0 });
 		expect(game.lane).toBe(1);
 	});
-	it('collects coffee, damages once per collision and ends after three hits', () => {
+	it('collects coffee and ends immediately on the first collision', () => {
 		const game = new Runner();
 		game.spawn = 100;
 		game.obstacles = [{ lane: 1, y: 460, coffee: true, label: '' }];
 		game.update(1 / 60);
 		expect(game.score).toBe(10);
-		for (let hit = 0; hit < 3; hit++) {
-			game.invulnerable = 0;
-			game.obstacles = [{ lane: 1, y: 460, coffee: false, label: 'BUG' }];
-			game.update(1 / 60);
-			game.update(1 / 60);
-			expect(game.lives).toBe(2 - hit);
-		}
+		game.obstacles = [{ lane: 1, y: 460, coffee: false, label: 'BUG' }];
+		game.update(1 / 60);
+		expect(game.lives).toBe(0);
 		expect(game.over).toBe(true);
+		const score = game.score;
+		game.update(1);
+		expect(game.lives).toBe(0);
+		expect(game.score).toBe(score);
 	});
 	it('keeps scoring after reaching the victory target', () => {
 		const game = new Runner();

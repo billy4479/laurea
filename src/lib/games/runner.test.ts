@@ -66,12 +66,14 @@ describe('runner objects', () => {
 	it('keeps formula obstacles harmful and coffee worth ten points', () => {
 		const game = new Runner();
 		game.spawn = 100;
-		game.obstacles = [{ lane: 1, y: 460, coffee: false, label: 'Ax = λx' }];
-		game.update(1 / 60);
-		expect(game.lives).toBe(2);
+		expect(game.lives).toBe(1);
 		game.obstacles = [{ lane: 1, y: 460, coffee: true, label: '' }];
 		game.update(1 / 60);
 		expect(game.bonus).toBe(10);
+		game.obstacles = [{ lane: 1, y: 460, coffee: false, label: 'Ax = λx' }];
+		game.update(1 / 60);
+		expect(game.lives).toBe(0);
+		expect(game.over).toBe(true);
 	});
 
 	it('shows the coffee bonus and formula label without the old C or lane slogans', () => {

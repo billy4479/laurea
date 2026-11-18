@@ -8,13 +8,14 @@
 
 	let { id }: { id: GameId } = $props();
 	const info = $derived(gameInfo(id));
+	const maxLives = $derived(id === 3 ? 3 : 1);
 	let host: HTMLDivElement;
 	let controller: GameController | undefined;
 	let phase = $state<'ready' | 'playing' | 'paused' | 'won' | 'over'>('ready');
 	let ready = $state(false);
 	let starting = $state(false);
 	let score = $state(0);
-	let lives = $state(3);
+	let lives = $state(1);
 	let won = $state(false);
 	let token = $state<string | undefined>();
 	let nickname = $state('');
@@ -43,7 +44,7 @@
 	onMount(() => {
 		disposed = false;
 		requests = new AbortController();
-		lives = id === 1 ? 1 : 3;
+		lives = maxLives;
 		Promise.all([
 			import('$lib/games/phaser-client'),
 			document.fonts.load('12px BigBlueTerminal').catch(() => [])
@@ -83,7 +84,7 @@
 		if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
 		controller?.restart();
 		score = 0;
-		lives = id === 1 ? 1 : 3;
+		lives = maxLives;
 		won = false;
 		saved = false;
 		showBoard = false;
@@ -171,7 +172,7 @@
 	<div class="hud">
 		<span><strong>{score}</strong> {info.unit} {won ? '✓' : `/ ${info.goal}`}</span>
 		<span class="lives" aria-label={`${lives} vite`}
-			>{'●'.repeat(lives)}{'○'.repeat(Math.max(0, (id === 1 ? 1 : 3) - lives))}</span
+			>{'●'.repeat(lives)}{'○'.repeat(Math.max(0, maxLives - lives))}</span
 		>
 	</div>
 	{#if phase !== 'playing' || showBoard}
@@ -249,18 +250,6 @@
 				{/if}
 				{#if message}<p class="small" role="status">{message}</p>{/if}
 			</div>
-		</div>
-	{/if}
-	{#if id === 2 && phase === 'playing'}
-		<div class="lane-controls">
-			<button
-				aria-label="Corsia a sinistra"
-				onclick={() => controller?.input({ type: 'left', x: 0, y: 0 })}>←</button
-			>
-			<button
-				aria-label="Corsia a destra"
-				onclick={() => controller?.input({ type: 'right', x: 0, y: 0 })}>→</button
-			>
 		</div>
 	{/if}
 </main>

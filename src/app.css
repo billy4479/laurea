@@ -99,8 +99,7 @@ footer {
 	border-top: 1px solid var(--line);
 	padding-top: 16px;
 }
-.button,
-.lane-controls button {
+.button {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -111,8 +110,7 @@ footer {
 	color: var(--accent);
 	text-decoration: none;
 }
-.button:hover,
-.lane-controls button:hover {
+.button:hover {
 	background: #242d38;
 }
 .button.secondary {
@@ -269,20 +267,6 @@ footer {
 }
 .saved {
 	color: var(--accent);
-}
-.lane-controls {
-	position: absolute;
-	z-index: 1;
-	bottom: calc(12px + env(safe-area-inset-bottom));
-	left: max(12px, env(safe-area-inset-left));
-	right: max(12px, env(safe-area-inset-right));
-	display: flex;
-	justify-content: space-between;
-	pointer-events: none;
-}
-.lane-controls button {
-	width: 64px;
-	pointer-events: auto;
 }
 .score-list {
 	list-style: none;
