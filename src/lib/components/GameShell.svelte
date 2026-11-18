@@ -194,7 +194,7 @@
 						}}>[← torna al gioco]</button
 					>
 					{#key `${id}-${boardVersion}`}<Leaderboard {id} />{/key}
-					<a class="button secondary" href={resolve('/')}>Menu giochi</a>
+					<a class="button secondary" href={resolve('/')}>Menu</a>
 				{:else if phase === 'ready'}
 					<h2>{info.title}</h2>
 					{#if info.instructions}<p>{info.instructions}</p>{/if}
@@ -217,7 +217,7 @@
 						}}>Termina e salva</button
 					>
 					<button class="text-button" onclick={openBoard}>[classifica]</button>
-					<a class="button secondary" href={resolve('/')}>Menu giochi</a>
+					<a class="button secondary" href={resolve('/')}>Menu</a>
 				{:else if phase === 'won'}
 					<h2>laurea sbloccata :)</h2>
 					<p>{info.victory}</p>
@@ -254,7 +254,7 @@
 					<div class="result-actions">
 						<button class="button" onclick={start} disabled={starting || saving}
 							>{starting ? '…' : 'Riprova'}</button
-						><a class="button secondary" href={resolve('/')}>Menu giochi</a>
+						><a class="button secondary" href={resolve('/')}>Menu</a>
 					</div>
 					<button class="text-button" onclick={openBoard}>[classifica]</button>
 				{/if}
