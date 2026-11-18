@@ -1,6 +1,7 @@
 // Loaded dynamically in the browser only: Phaser accesses window at import time.
 import Phaser from 'phaser';
 import { createGame } from './index';
+import { createEmojiTextures, preloadEmojiTextures, emojiTexture, type EmojiKind } from './emoji';
 import type { GameId } from './catalog';
 import { HEIGHT, WIDTH, type Game, type Input, type Painter, type Point } from './types';
 
@@ -8,15 +9,32 @@ class PhaserPainter implements Painter {
 	private graphics: Phaser.GameObjects.Graphics;
 	private labels: Phaser.GameObjects.Text[] = [];
 	private used = 0;
+	private sprites: Phaser.GameObjects.Image[] = [];
+	private usedSprites = 0;
 	constructor(private scene: Phaser.Scene) {
 		this.graphics = scene.add.graphics();
+		createEmojiTextures(scene);
 	}
 	begin() {
 		this.graphics.clear();
 		this.used = 0;
+		this.usedSprites = 0;
 	}
 	end() {
 		for (let i = this.used; i < this.labels.length; i++) this.labels[i].setVisible(false);
+		for (let i = this.usedSprites; i < this.sprites.length; i++) this.sprites[i].setVisible(false);
+	}
+	emoji(kind: EmojiKind, x: number, y: number, size: number) {
+		let sprite = this.sprites[this.usedSprites++];
+		if (!sprite) {
+			sprite = this.scene.add.image(x, y, emojiTexture(kind)).setDepth(1);
+			this.sprites.push(sprite);
+		}
+		sprite
+			.setTexture(emojiTexture(kind))
+			.setPosition(x, y)
+			.setDisplaySize(size, size)
+			.setVisible(true);
 	}
 	private color(value: string) {
 		return Number.parseInt(value.slice(1), 16);
@@ -45,7 +63,8 @@ class PhaserPainter implements Painter {
 		if (!label) {
 			label = this.scene.add
 				.text(0, 0, '', { fontFamily: 'BigBlueTerminal, monospace', resolution, align: 'center' })
-				.setOrigin(0.5, 0.8);
+				.setOrigin(0.5, 0.8)
+				.setDepth(2);
 			label.texture.setFilter(Phaser.Textures.FilterMode.LINEAR);
 			this.labels.push(label);
 		}
@@ -73,6 +92,9 @@ export function mountGame(parent: HTMLElement, id: GameId, onFrame: (game: Game)
 	const density = Math.min(3, window.devicePixelRatio || 1);
 	class ArcadeScene extends Phaser.Scene {
 		private painter!: PhaserPainter;
+		preload() {
+			preloadEmojiTextures(this);
+		}
 		create() {
 			this.painter = new PhaserPainter(this);
 			const resize = () => {

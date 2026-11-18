@@ -1,8 +1,11 @@
+import type { EmojiKind } from './emoji';
+
 export const WIDTH = 360;
 export const HEIGHT = 560;
 export type Point = { x: number; y: number };
 export type Input = { type: 'down' | 'move' | 'up' | 'left' | 'right'; x: number; y: number };
 export interface Painter {
+	emoji(kind: EmojiKind, x: number, y: number, size: number): void;
 	rect(x: number, y: number, w: number, h: number, color: string, radius?: number): void;
 	circle(x: number, y: number, radius: number, color: string): void;
 	polygon(points: Point[], color: string): void;
@@ -45,24 +48,4 @@ export function rounded(
 	r = 10
 ) {
 	p.rect(x, y, w, h, color, r);
-}
-export function cap(p: Painter, x: number, y: number, size = 24, color = colors.ink) {
-	p.polygon(
-		[
-			{ x: x - size, y },
-			{ x, y: y - size / 2 },
-			{ x: x + size, y },
-			{ x, y: y + size / 2 }
-		],
-		color
-	);
-	p.rect(x - size / 2, y + size / 2, size, size / 4, color);
-	p.line(
-		[
-			{ x: x + size, y },
-			{ x: x + size, y: y + size * 0.8 }
-		],
-		colors.gold,
-		3
-	);
 }

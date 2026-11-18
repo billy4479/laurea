@@ -1,4 +1,14 @@
-import { cap, colors, HEIGHT, rounded, text, type Game, type Input, type Painter } from './types';
+import { colors, HEIGHT, rounded, text, type Game, type Input, type Painter } from './types';
+
+export const obstacleLabels = [
+	'ESAME',
+	'BUG',
+	'TESI?',
+	'Ax = λx',
+	'∇L(θ) = 0',
+	'∫₀¹ x²dx\n= 1/3',
+	'sin²x +\ncos²x = 1'
+] as const;
 
 type Obstacle = { lane: number; y: number; coffee: boolean; label: string };
 export class Runner implements Game {
@@ -11,7 +21,8 @@ export class Runner implements Game {
 	spawn = 0.7;
 	invulnerable = 0;
 	obstacles: Obstacle[] = [];
-	private startX = 0;
+	private startX: number | null = null;
+	private swiped = false;
 	constructor(
 		private random = Math.random,
 		private height = HEIGHT
@@ -19,10 +30,19 @@ export class Runner implements Game {
 	input(input: Input) {
 		if (input.type === 'left') this.lane = Math.max(0, this.lane - 1);
 		if (input.type === 'right') this.lane = Math.min(2, this.lane + 1);
-		if (input.type === 'down') this.startX = input.x;
-		if (input.type === 'move' && Math.abs(input.x - this.startX) > 28) {
-			this.lane = Math.max(0, Math.min(2, this.lane + Math.sign(input.x - this.startX)));
+		if (input.type === 'down') {
 			this.startX = input.x;
+			this.swiped = false;
+		}
+		if (input.type === 'up') this.startX = null;
+		if (
+			input.type === 'move' &&
+			this.startX !== null &&
+			!this.swiped &&
+			Math.abs(input.x - this.startX) > 28
+		) {
+			this.lane = Math.max(0, Math.min(2, this.lane + Math.sign(input.x - this.startX)));
+			this.swiped = true;
 		}
 	}
 	update(dt: number) {
@@ -35,7 +55,7 @@ export class Runner implements Game {
 				lane: Math.floor(this.random() * 3),
 				y: -45,
 				coffee: this.random() < 0.3,
-				label: ['ESAME', 'BUG', 'TESI?'][Math.floor(this.random() * 3)]
+				label: obstacleLabels[Math.floor(this.random() * obstacleLabels.length)]
 			});
 			this.spawn = Math.max(0.48, 1.05 - this.elapsed * 0.004);
 		}
@@ -59,7 +79,6 @@ export class Runner implements Game {
 	draw(ctx: Painter) {
 		for (let lane = 0; lane < 3; lane++) {
 			rounded(ctx, 17 + lane * 110, 0, 106, this.height, lane % 2 ? '#171d25' : '#131820');
-			text(ctx, ['IERI', 'OGGI', 'DOMANI'][lane], 70 + lane * 110, 100, 10, '#586473');
 		}
 		for (const x of [125, 235]) {
 			for (let y = (this.elapsed * 170) % 30; y < this.height; y += 30)
@@ -75,17 +94,23 @@ export class Runner implements Game {
 		for (const item of this.obstacles) {
 			const x = 70 + item.lane * 110;
 			if (item.coffee) {
-				rounded(ctx, x - 19, item.y - 20, 38, 38, colors.gold, 8);
-				text(ctx, 'C', x, item.y + 7, 24, colors.paper);
-				text(ctx, '+10', x, item.y - 27, 11, colors.gold);
+				ctx.emoji('coffee', x, item.y, 38);
+				text(ctx, '+10', x, item.y - 30, 12, colors.gold);
 			} else {
 				rounded(ctx, x - 43, item.y - 24, 86, 48, colors.red, 8);
-				text(ctx, item.label, x, item.y + 5, 13, '#fff9ed');
+				if (['ESAME', 'BUG', 'TESI?'].includes(item.label)) {
+					ctx.emoji(
+						item.label === 'BUG' ? 'bug' : item.label === 'TESI?' ? 'code' : 'exam',
+						x - 23,
+						item.y,
+						32
+					);
+					text(ctx, item.label, x + 18, item.y + 5, 12, '#fff9ed');
+				} else text(ctx, item.label, x, item.y + 5, 12, '#fff9ed');
 			}
 		}
 		if (this.invulnerable <= 0 || Math.floor(this.invulnerable * 12) % 2 === 0) {
-			rounded(ctx, 70 + this.lane * 110 - 18, this.height - 109, 36, 40, '#7aa2f7');
-			cap(ctx, 70 + this.lane * 110, this.height - 113, 25);
+			ctx.emoji('runner', 70 + this.lane * 110, this.height - 94, 46);
 		}
 	}
 }

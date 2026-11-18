@@ -6,6 +6,7 @@ import type { Painter } from './types';
 function painter() {
 	return {
 		rect: vi.fn(),
+		emoji: vi.fn<Painter['emoji']>(),
 		circle: vi.fn(),
 		polygon: vi.fn(),
 		line: vi.fn<Painter['line']>(),
@@ -116,7 +117,8 @@ describe('Flappy progression', () => {
 		const game = new Flappy();
 		const empty = painter();
 		game.draw(empty);
-		expect(empty.text.mock.calls.map(([value]) => value)).toEqual(['x']);
+		expect(empty.text.mock.calls).toEqual([]);
+		expect(empty.emoji).toHaveBeenCalledWith('graduate', 85, game.y, 44);
 		game.gates = [{ x: 200, gap: 280, passed: false, label: 'ANALISI' }];
 		const ordinary = painter();
 		game.draw(ordinary);

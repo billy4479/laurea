@@ -1,14 +1,4 @@
-import {
-	cap,
-	colors,
-	HEIGHT,
-	rounded,
-	text,
-	WIDTH,
-	type Game,
-	type Input,
-	type Painter
-} from './types';
+import { colors, HEIGHT, rounded, text, WIDTH, type Game, type Input, type Painter } from './types';
 
 import { drawGateLabels } from './flappy-labels';
 import { gameInfo } from './catalog';
@@ -94,8 +84,6 @@ export class Flappy implements Game {
 				text(ctx, 'LAUREA', x + 14, this.height / 2, 12, '#ff5252', Math.PI / 2);
 			}
 		}
-		ctx.circle(85, this.y, 17, colors.gold);
-		cap(ctx, 85, this.y - 17, 21);
-		text(ctx, 'x', 85, this.y + 6, 17, colors.paper);
+		ctx.emoji('graduate', 85, this.y, 44);
 	}
 }

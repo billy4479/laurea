@@ -1,5 +1,4 @@
 import {
-	cap,
 	colors,
 	HEIGHT,
 	rounded,
@@ -102,16 +101,9 @@ export class Slice implements Game {
 			const { x, y } = item;
 			if (item.bad) {
 				rounded(ctx, x - 30, y - 27, 60, 54, colors.red, 6);
-				text(ctx, item.kind ? '</>' : 'ESAME', x, y + 5, item.kind ? 20 : 12, '#fff9ed');
-			} else if (item.kind === 0) {
-				rounded(ctx, x - 25, y - 10, 50, 32, '#d79a97', 5);
-				rounded(ctx, x - 25, y - 13, 50, 10, '#fffaf1', 4);
-				ctx.rect(x - 2, y - 29, 4, 16, colors.gold);
-				text(ctx, '✦', x, y - 31, 16, colors.red);
-			} else if (item.kind === 1) cap(ctx, x, y, 29);
-			else {
-				ctx.circle(x, y, 24, colors.gold);
-				text(ctx, '✧', x, y + 6, 19, colors.paper);
+				ctx.emoji(item.kind ? 'code' : 'exam', x, y, 44);
+			} else {
+				ctx.emoji(item.kind === 0 ? 'cake' : item.kind === 1 ? 'graduate' : 'candy', x, y, 54);
 			}
 		}
 		if (this.trail.length > 1) {

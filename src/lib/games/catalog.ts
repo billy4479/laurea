@@ -19,7 +19,7 @@ export const games = [
 		title: 'La corsa alla laurea',
 		subtitle: 'La scadenza era ieri. Corri.',
 		instructions:
-			'Cambia corsia per evitare esami e bug. Raccogli i caffè: valgono 10 punti. Hai tre vite.',
+			'Ogni swipe cambia una sola corsia. Evita esami, bug e formule. Raccogli le tazzine di caffè: valgono 10 punti. Hai tre vite.',
 		controls: 'Scorri a destra o sinistra · oppure ← →',
 		goal: 180,
 		unit: 'PT',
