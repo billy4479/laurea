@@ -16,9 +16,8 @@ export const games = [
 	{
 		id: 2,
 		title: 'La corsa alla laurea',
-		subtitle: 'La scadenza era ieri. Corri.',
-		instructions:
-			'Ogni swipe cambia una sola corsia. Evita esami, bug e formule: hai una sola vita. Raccogli i caffè da +10 punti e attraversa il traguardo rosso. La corsa accelera col tempo.',
+		subtitle: '',
+		instructions: '',
 		controls: 'Swipe a destra o sinistra · oppure ← → sulla tastiera',
 		goal: 180,
 		unit: 'PT',
