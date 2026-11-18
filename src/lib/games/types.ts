@@ -18,11 +18,11 @@ export interface Game {
 	draw(painter: Painter): void;
 }
 export const colors = {
-	ink: '#233d3a',
-	red: '#d44e38',
-	green: '#447c70',
-	gold: '#daa242',
-	paper: '#faf6ed'
+	ink: '#d8dee9',
+	red: '#923744',
+	green: '#3d704c',
+	gold: '#e0af68',
+	paper: '#101318'
 };
 export function text(
 	p: Painter,

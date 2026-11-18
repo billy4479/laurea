@@ -4,6 +4,42 @@ import { Runner } from './runner';
 import { segmentDistance, Slice } from './slice';
 import { gameInfo } from './catalog';
 
+describe('tall phone screens', () => {
+	it('uses the full height for Flappy boundaries and gate positions', () => {
+		const game = new Flappy(() => 1, 800);
+		expect(game.y).toBe(400);
+		game.y = 650;
+		game.update(1 / 60);
+		expect(game.over).toBe(false);
+		expect(game.gates[0].gap).toBe(635);
+		game.y = 790;
+		game.update(1 / 60);
+		expect(game.over).toBe(true);
+	});
+	it('moves the runner and collectible collision zone toward the bottom', () => {
+		const game = new Runner(() => 0.5, 800);
+		game.spawn = 100;
+		game.obstacles = [{ lane: 1, y: 460, coffee: false, label: 'ESAME' }];
+		game.update(1 / 60);
+		expect(game.lives).toBe(3);
+		game.obstacles = [{ lane: 1, y: 700, coffee: true, label: '' }];
+		game.update(1 / 60);
+		expect(game.bonus).toBe(10);
+	});
+	it('launches treats from the actual bottom and only misses them there', () => {
+		const game = new Slice(() => 0.5, 800);
+		game.spawn = 0;
+		game.update(1 / 60);
+		expect(game.items[0].y).toBeGreaterThan(800);
+		game.items = [{ x: 180, y: 622, vx: 0, vy: 100, bad: false, kind: 0, cut: false }];
+		game.update(1 / 60);
+		expect(game.lives).toBe(3);
+		game.items[0].y = 862;
+		game.update(1 / 60);
+		expect(game.lives).toBe(2);
+	});
+});
+
 describe('Flappy Laurea', () => {
 	it('awards one CFU only after clearing a gate, then keeps going past graduation', () => {
 		const game = new Flappy(() => 0.5);

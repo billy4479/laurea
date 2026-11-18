@@ -37,7 +37,10 @@ export class Slice implements Game {
 	items: Treat[] = [];
 	trail: (Point & { age: number })[] = [];
 	private previous: Point | null = null;
-	constructor(private random = Math.random) {}
+	constructor(
+		private random = Math.random,
+		private height = HEIGHT
+	) {}
 	input(input: Input) {
 		if (input.type === 'up') {
 			this.previous = null;
@@ -69,7 +72,7 @@ export class Slice implements Game {
 				const x = 65 + this.random() * 230;
 				this.items.push({
 					x,
-					y: HEIGHT + 40,
+					y: this.height + 40,
 					vx: (180 - x) * 0.45 + (this.random() - 0.5) * 70,
 					vy: -510 - this.random() * 110,
 					bad: this.random() < 0.22,
@@ -83,18 +86,18 @@ export class Slice implements Game {
 			item.vy += 650 * dt;
 			item.x += item.vx * dt;
 			item.y += item.vy * dt;
-			if (!item.cut && !item.bad && item.y > HEIGHT + 60 && item.vy > 0) {
+			if (!item.cut && !item.bad && item.y > this.height + 60 && item.vy > 0) {
 				this.lives--;
 				item.cut = true;
 			}
 		}
-		this.items = this.items.filter((item) => item.y < HEIGHT + 65 && !item.cut);
+		this.items = this.items.filter((item) => item.y < this.height + 65 && !item.cut);
 		this.trail.forEach((p) => (p.age -= dt));
 		this.trail = this.trail.filter((p) => p.age > 0);
 		this.over = this.lives <= 0;
 	}
 	draw(ctx: Painter) {
-		text(ctx, 'UN TAGLIO NETTO CON GLI ESAMI.', 180, 60, 12, '#bcb7a6');
+		text(ctx, 'UN TAGLIO NETTO CON GLI ESAMI.', 180, 110, 12, '#586473');
 		for (const item of this.items) {
 			const { x, y } = item;
 			if (item.bad) {
@@ -108,11 +111,11 @@ export class Slice implements Game {
 			} else if (item.kind === 1) cap(ctx, x, y, 29);
 			else {
 				ctx.circle(x, y, 24, colors.gold);
-				text(ctx, '✧', x, y + 6, 19);
+				text(ctx, '✧', x, y + 6, 19, colors.paper);
 			}
 		}
 		if (this.trail.length > 1) {
-			ctx.line(this.trail, colors.green, 5);
+			ctx.line(this.trail, colors.ink, 3);
 		}
 	}
 }

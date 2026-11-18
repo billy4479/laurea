@@ -12,7 +12,10 @@ export class Runner implements Game {
 	invulnerable = 0;
 	obstacles: Obstacle[] = [];
 	private startX = 0;
-	constructor(private random = Math.random) {}
+	constructor(
+		private random = Math.random,
+		private height = HEIGHT
+	) {}
 	input(input: Input) {
 		if (input.type === 'left') this.lane = Math.max(0, this.lane - 1);
 		if (input.type === 'right') this.lane = Math.min(2, this.lane + 1);
@@ -38,34 +41,34 @@ export class Runner implements Game {
 		}
 		for (const item of this.obstacles) {
 			item.y += Math.min(330, 170 + this.elapsed * 1.5) * dt;
-			if (item.lane === this.lane && Math.abs(item.y - 466) < 31) {
+			if (item.lane === this.lane && Math.abs(item.y - (this.height - 94)) < 31) {
 				if (item.coffee) {
 					this.bonus += 10;
-					item.y = HEIGHT + 100;
+					item.y = this.height + 100;
 				} else if (this.invulnerable <= 0) {
 					this.lives--;
 					this.invulnerable = 1.2;
-					item.y = HEIGHT + 100;
+					item.y = this.height + 100;
 				}
 			}
 		}
-		this.obstacles = this.obstacles.filter((item) => item.y < HEIGHT + 50);
+		this.obstacles = this.obstacles.filter((item) => item.y < this.height + 50);
 		this.score = Math.floor(this.elapsed * 3) + this.bonus;
 		this.over = this.lives <= 0;
 	}
 	draw(ctx: Painter) {
 		for (let lane = 0; lane < 3; lane++) {
-			rounded(ctx, 17 + lane * 110, 0, 106, HEIGHT, lane % 2 ? '#e6e9ec' : '#eef0ea');
-			text(ctx, ['IERI', 'OGGI', 'DOMANI'][lane], 70 + lane * 110, 32, 10, '#88988e');
+			rounded(ctx, 17 + lane * 110, 0, 106, this.height, lane % 2 ? '#171d25' : '#131820');
+			text(ctx, ['IERI', 'OGGI', 'DOMANI'][lane], 70 + lane * 110, 100, 10, '#586473');
 		}
 		for (const x of [125, 235]) {
-			for (let y = (this.elapsed * 170) % 30; y < HEIGHT; y += 30)
+			for (let y = (this.elapsed * 170) % 30; y < this.height; y += 30)
 				ctx.line(
 					[
 						{ x, y },
 						{ x, y: y + 12 }
 					],
-					'#c9d2c8',
+					'#39414e',
 					2
 				);
 		}
@@ -73,16 +76,16 @@ export class Runner implements Game {
 			const x = 70 + item.lane * 110;
 			if (item.coffee) {
 				rounded(ctx, x - 19, item.y - 20, 38, 38, colors.gold, 8);
-				text(ctx, 'C', x, item.y + 7, 24);
-				text(ctx, '+10', x, item.y - 27, 11, colors.green);
+				text(ctx, 'C', x, item.y + 7, 24, colors.paper);
+				text(ctx, '+10', x, item.y - 27, 11, colors.gold);
 			} else {
 				rounded(ctx, x - 43, item.y - 24, 86, 48, colors.red, 8);
 				text(ctx, item.label, x, item.y + 5, 13, '#fff9ed');
 			}
 		}
 		if (this.invulnerable <= 0 || Math.floor(this.invulnerable * 12) % 2 === 0) {
-			rounded(ctx, 70 + this.lane * 110 - 18, 451, 36, 40, '#6476ad');
-			cap(ctx, 70 + this.lane * 110, 447, 25);
+			rounded(ctx, 70 + this.lane * 110 - 18, this.height - 109, 36, 40, '#7aa2f7');
+			cap(ctx, 70 + this.lane * 110, this.height - 113, 25);
 		}
 	}
 }

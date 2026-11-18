@@ -21,9 +21,9 @@ class PhaserPainter implements Painter {
 	private color(value: string) {
 		return Number.parseInt(value.slice(1), 16);
 	}
-	rect(x: number, y: number, w: number, h: number, color: string, radius = 0) {
+	rect(x: number, y: number, w: number, h: number, color: string) {
 		this.graphics.fillStyle(this.color(color));
-		this.graphics.fillRoundedRect(x, y, w, h, Math.min(radius, w / 2, h / 2));
+		this.graphics.fillRect(x, y, w, h);
 	}
 	circle(x: number, y: number, radius: number, color: string) {
 		this.graphics.fillStyle(this.color(color));
@@ -41,7 +41,7 @@ class PhaserPainter implements Painter {
 		let label = this.labels[this.used++];
 		if (!label) {
 			label = this.scene.add
-				.text(0, 0, '', { fontFamily: 'system-ui, sans-serif', fontStyle: 'bold' })
+				.text(0, 0, '', { fontFamily: 'LaureaMono, monospace', fontStyle: 'bold' })
 				.setOrigin(0.5, 0.8);
 			this.labels.push(label);
 		}
@@ -53,7 +53,9 @@ class PhaserPainter implements Painter {
 }
 
 export function mountGame(parent: HTMLElement, id: GameId, onFrame: (game: Game) => void) {
-	let model = createGame(id);
+	// Keep a phone-width world, extending its height on tall mobile screens.
+	const height = Math.max(HEIGHT, (WIDTH * parent.clientHeight) / Math.max(1, parent.clientWidth));
+	let model = createGame(id, height);
 	let active = false;
 	let accumulator = 0;
 	let dragging = false;
@@ -61,14 +63,25 @@ export function mountGame(parent: HTMLElement, id: GameId, onFrame: (game: Game)
 		private painter!: PhaserPainter;
 		create() {
 			this.painter = new PhaserPainter(this);
+			const resize = () => {
+				this.cameras.main.setZoom(Math.min(this.scale.width / WIDTH, this.scale.height / height));
+				this.cameras.main.centerOn(WIDTH / 2, height / 2);
+			};
+			resize();
+			this.scale.on('resize', resize);
+			this.events.once('shutdown', () => this.scale.off('resize', resize));
 			this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
 				if (active) {
 					dragging = true;
-					model.input({ type: 'down', x: p.x, y: p.y });
+					const point = this.cameras.main.getWorldPoint(p.x, p.y);
+					model.input({ type: 'down', x: point.x, y: point.y });
 				}
 			});
 			this.input.on('pointermove', (p: Phaser.Input.Pointer) => {
-				if (active && dragging) model.input({ type: 'move', x: p.x, y: p.y });
+				if (active && dragging) {
+					const point = this.cameras.main.getWorldPoint(p.x, p.y);
+					model.input({ type: 'move', x: point.x, y: point.y });
+				}
 			});
 			const release = () => {
 				dragging = false;
@@ -100,19 +113,19 @@ export function mountGame(parent: HTMLElement, id: GameId, onFrame: (game: Game)
 	const phaser = new Phaser.Game({
 		type: Phaser.AUTO,
 		parent,
-		width: WIDTH,
-		height: HEIGHT,
-		backgroundColor: '#f1f0e5',
+		width: parent.clientWidth,
+		height: parent.clientHeight,
+		backgroundColor: '#101318',
 		scene: ArcadeScene,
-		scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
+		scale: { mode: Phaser.Scale.RESIZE },
 		input: { keyboard: false, activePointers: 1 },
-		render: { antialias: true },
+		render: { antialias: false, pixelArt: true, roundPixels: true },
 		audio: { noAudio: true },
 		banner: false
 	});
 	return {
 		restart() {
-			model = createGame(id);
+			model = createGame(id, height);
 			accumulator = 0;
 			dragging = false;
 		},

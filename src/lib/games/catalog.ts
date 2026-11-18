@@ -9,7 +9,7 @@ export const games = [
 		goal: 12,
 		unit: 'CFU',
 		symbol: 'ƒ',
-		color: '#447c70',
+		color: '#9ece6a',
 		label: 'RIFLESSI',
 		victory: '12 CFU e nessuna intenzione di fermarsi.',
 		loss: 'Era solo un appello di prova.'
@@ -24,7 +24,7 @@ export const games = [
 		goal: 180,
 		unit: 'PT',
 		symbol: '↗',
-		color: '#6476ad',
+		color: '#7aa2f7',
 		label: 'ULTIMO MINUTO',
 		victory: 'Tesi consegnata. Con un margine di 0,001 secondi.',
 		loss: 'Tranquillo, la prossima sessione è vicina.'
@@ -39,7 +39,7 @@ export const games = [
 		goal: 200,
 		unit: 'PT',
 		symbol: '✳',
-		color: '#c08032',
+		color: '#e0af68',
 		label: 'FESTEGGIAMENTI',
 		victory: 'La sessione è finita. La torta, per fortuna, no.',
 		loss: 'C’era un esame dentro la torta.'

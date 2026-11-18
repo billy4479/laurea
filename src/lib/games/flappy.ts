@@ -20,7 +20,12 @@ export class Flappy implements Game {
 	elapsed = 0;
 	spawn = 0;
 	gates: Gate[] = [];
-	constructor(private random = Math.random) {}
+	constructor(
+		private random = Math.random,
+		private height = HEIGHT
+	) {
+		this.y = height / 2;
+	}
 	input(input: Input) {
 		if (input.type === 'down') this.velocity = -285;
 	}
@@ -34,7 +39,7 @@ export class Flappy implements Game {
 		if (this.spawn <= 0) {
 			this.gates.push({
 				x: WIDTH + 10,
-				gap: 155 + this.random() * 240,
+				gap: 155 + this.random() * (this.height - 320),
 				passed: false,
 				label: ['ANALISI', 'ALGEBRA', 'DEADLINE', 'NaN'][this.gates.length % 4]
 			});
@@ -55,20 +60,20 @@ export class Flappy implements Game {
 				this.over = true;
 		}
 		this.gates = this.gates.filter((g) => g.x > -70);
-		if (this.y < 16 || this.y > HEIGHT - 22) this.over = true;
+		if (this.y < 16 || this.y > this.height - 22) this.over = true;
 		if (this.over) this.lives = 0;
 	}
 	draw(ctx: Painter) {
-		text(ctx, '∫ procrastinazione dt = domani', 180, 70, 14, '#b4c8bc');
-		text(ctx, '∀ ε > 0, manca sempre poco', 185, 490, 13, '#b4c8bc');
+		text(ctx, '∫ procrastinazione dt = domani', 180, 110, 12, '#586473');
+		text(ctx, '∀ ε > 0, manca sempre poco', 185, this.height - 70, 12, '#586473');
 		for (const g of this.gates) {
 			rounded(ctx, g.x, -12, 60, g.gap - 91 + 12, colors.green);
-			rounded(ctx, g.x, g.gap + 91, 60, HEIGHT - g.gap - 91 + 12, colors.green);
+			rounded(ctx, g.x, g.gap + 91, 60, this.height - g.gap - 91 + 12, colors.green);
 			text(ctx, g.label.slice(0, 5), g.x + 30, g.gap - 120, 10, '#fff9ed');
 			text(ctx, '∑', g.x + 30, g.gap + 125, 23, '#fff9ed');
 		}
 		ctx.circle(85, this.y, 17, colors.gold);
 		cap(ctx, 85, this.y - 17, 21);
-		text(ctx, 'x', 85, this.y + 6, 17);
+		text(ctx, 'x', 85, this.y + 6, 17, colors.paper);
 	}
 }
