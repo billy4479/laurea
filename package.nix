@@ -6,6 +6,7 @@
   pnpmConfigHook,
   nodejs,
   makeWrapper,
+  fonts,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "laurea";
@@ -14,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     root = ./.;
     fileset = lib.fileset.unions [
       ./src
-      ./static
+      ./static/favicon.svg
       ./package.json
       ./pnpm-lock.yaml
       ./pnpm-workspace.yaml
@@ -38,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = # sh
     ''
       runHook preBuild
+      mkdir -p static/fonts
+      cp ${fonts}/* static/fonts/
       pnpm check
       pnpm build
       runHook postBuild

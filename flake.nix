@@ -10,6 +10,11 @@
       system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        fonts = pkgs.callPackage ./nix/fonts.nix { };
+        prepareFonts = pkgs.writeShellScriptBin "prepare-fonts" /* sh */ ''
+          mkdir -p static/fonts
+          cp --remove-destination ${fonts}/* static/fonts/
+        '';
       in
       {
         devShells.default = pkgs.mkShell {
@@ -20,12 +25,19 @@
             svelte-language-server
             nixfmt
             shfmt
+            ruff
+            prepareFonts
             (writeShellScriptBin "prettier" /* sh */ ''
               exec pnpm exec prettier "$@"
             '')
           ];
+          shellHook = "prepare-fonts";
         };
-        packages.default = pkgs.callPackage ./package.nix { nodejs = pkgs.nodejs_24; };
+        packages.fonts = fonts;
+        packages.default = pkgs.callPackage ./package.nix {
+          nodejs = pkgs.nodejs_24;
+          inherit fonts;
+        };
       }
     );
 }

@@ -4,12 +4,14 @@ Un piccolo ricordo della festa: tre giochi 2D per browser mobile, con tema scuro
 
 I giochi occupano tutta l’area disponibile nel browser, senza colonne o scroll della pagina. Sui telefoni alti il campo si estende in verticale; un cambio di orientamento ridimensiona la scena senza tagliare gli oggetti o azzerare la partita. La barra del browser rimane sotto il controllo del browser stesso.
 
+Font e sprite sono gestiti da Nix (`nix/fonts.nix`): BigBlue originale è scaricato con hash fisso; Noto Color Emoji arriva da Nixpkgs. Pillow rasterizza solo le emoji elencate in `src/lib/games/emoji-glyphs.json` in PNG 16×16, con ricampionamento nearest-neighbour. Phaser le ingrandisce con lo stesso filtro: personaggi e oggetti sono pixelati, il testo resta nitido. Non serve supporto ai font emoji nel browser. Le immagini e i TTF generati non vengono committati.
+
 BigBlue ha una griglia nativa di 8×12 pixel: il testo usa corpi di 12 o 24 pixel, senza grassetto sintetico. Il canvas segue la densità del display (fino a 3×) e le texture del testo sono rasterizzate alla scala effettiva della camera, per evitare di ingrandire scritte a bassa risoluzione. Il ridimensionamento mantiene corretti anche i controlli touch.
 
 ## I QR già stampati
 
 - `/g/1`: **Flappy Laurea**, tap o Spazio per saltare. La velocità aumenta gradualmente col tempo, fino a un limite per mantenere giocabile la modalità infinita. La distanza tra le colonne resta fissa: aumentando la velocità, gli esami arrivano più spesso. Vinci a 12 CFU attraversando la linea rossa tratteggiata, sul bordo finale del dodicesimo esame.
-- `/g/2`: **La corsa alla laurea**, tre corsie, swipe, pulsanti o frecce. Vinci a 180 punti; i caffè valgono +10, gli ostacoli costano una delle tre vite.
+- `/g/2`: **La corsa alla laurea**, tre corsie, uno swipe per ogni cambio di corsia, pulsanti o frecce. Vinci a 180 punti; i caffè valgono +10, gli ostacoli costano una delle tre vite.
 - `/g/3`: **Taglia la sessione**, trascina per tagliare torte, cappelli e confetti. Esami e codice rossi non vanno tagliati. Tre vite, vittoria a 200 punti.
 - `/`: menu comune. Tutte le pagine sono raggiungibili direttamente, senza passare dalla home.
 
@@ -25,7 +27,9 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-In alternativa: Node >= 24 e pnpm 12. Il server di sviluppo ascolta su `0.0.0.0:5173`, anche per prove dal telefono nella stessa rete, se il firewall lo consente.
+Entrare nella shell prepara automaticamente `static/fonts/`, inclusi sprite e licenze. Dopo modifiche all’elenco delle emoji, eseguire `prepare-fonts` nella shell. La build del pacchetto usa gli stessi asset; `nix build .#fonts` permette di generarli separatamente. Nix è necessario per preparare gli asset anche se poi si eseguono Node >= 24 e pnpm 12 fuori dalla shell.
+
+Il server di sviluppo ascolta su `0.0.0.0:5173`, anche per prove dal telefono nella stessa rete, se il firewall lo consente.
 
 ```sh
 pnpm check
@@ -70,5 +74,5 @@ Il cambio scheda mette in pausa senza riprendere automaticamente. Nessun audio. 
 
 - I punteggi sono calcolati sul client: biglietti monouso, limiti alla frequenza e controlli di plausibilità riducono gli abusi banali, **non costituiscono un sistema anti-cheat**. I biglietti scadono dopo 24 ore; gli IP non sono salvati nel database.
 - Nessuna autenticazione del nickname o moderazione integrata. Usare un soprannome non sensibile; prima di pubblicare decidere durata di conservazione e modalità di cancellazione dei punteggi.
-- Difficoltà e durata sono da rifinire giocando su telefoni reali. La grafica è volutamente semplice: niente sprite complessi o asset da caricare.
+- Difficoltà e durata sono da rifinire giocando su telefoni reali. La grafica è volutamente semplice: emoji 16×16 generate da Nix e piccoli asset locali, senza CDN.
 - Restano da scegliere dominio e configurazione definitiva del deployment, e da fare una prova su Safari/iPhone reale.
