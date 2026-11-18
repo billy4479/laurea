@@ -29,7 +29,7 @@ export const games = [
 	},
 	{
 		id: 3,
-		title: 'Taglia la sessione',
+		title: 'Taglia e laurea',
 		subtitle: '',
 		instructions: '',
 		controls: '',
@@ -37,7 +37,7 @@ export const games = [
 		unit: 'PT',
 		symbol: '✳',
 		color: '#e0af68',
-		label: 'FESTEGGIAMENTI',
+		label: '',
 		victory: 'La sessione è finita. La torta, per fortuna, no.',
 		loss: 'C’era un esame dentro la torta.'
 	}
