@@ -161,7 +161,6 @@
 <main class="play-page" style:--accent={info.color} aria-label={info.title}>
 	<div class="phaser-host" bind:this={host}></div>
 	<header class="game-toolbar">
-		<a href={resolve('/')}>[menu]</a>
 		<h1>{info.title}</h1>
 		<button
 			class="text-button"
