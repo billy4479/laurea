@@ -17,10 +17,6 @@
 			{#each games as game (game.id)}
 				<li>
 					<a href={resolve('/g/[id]', { id: String(game.id) })}>[{game.id}] {game.title}</a>
-					<p class="muted">
-						{#if game.subtitle}{game.subtitle}<br />{/if}Obiettivo: {game.goal}
-						{game.unit}.
-					</p>
 				</li>
 			{/each}
 		</ol>
