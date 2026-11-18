@@ -30,10 +30,9 @@ export const games = [
 	{
 		id: 3,
 		title: 'Taglia la sessione',
-		subtitle: 'Basta formule. È ora della torta.',
-		instructions:
-			'Trascina il dito su torte, cappelli e confetti. Ogni oggetto buono lasciato cadere costa una vita. Evita gli oggetti rossi: tagliarli costa una vita, lasciarli cadere no. I lanci accelerano col tempo.',
-		controls: 'Trascina il dito · oppure il mouse premuto',
+		subtitle: '',
+		instructions: '',
+		controls: '',
 		goal: 200,
 		unit: 'PT',
 		symbol: '✳',
