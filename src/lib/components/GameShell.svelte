@@ -15,6 +15,7 @@
 	let ready = $state(false);
 	let starting = $state(false);
 	let score = $state(0);
+	const graduationPercent = $derived(Math.min(100, Math.floor((score / info.goal) * 100)));
 	let lives = $state(1);
 	let won = $state(false);
 	let token = $state<string | undefined>();
@@ -167,6 +168,13 @@
 			onclick={pause}
 			disabled={phase !== 'playing'}
 			aria-label="Metti in pausa">[pausa]</button
+		>
+		<progress
+			class="graduation-progress"
+			max={info.goal}
+			value={Math.min(score, info.goal)}
+			aria-label="Progresso verso la laurea"
+			aria-valuetext={`${graduationPercent}% verso la laurea`}>{graduationPercent}%</progress
 		>
 	</header>
 	<div class="hud">

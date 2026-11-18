@@ -151,8 +151,9 @@ footer {
 	left: 0;
 	right: 0;
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
-	gap: 12px;
+	gap: 4px 12px;
 	padding: calc(4px + env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 4px
 		max(12px, env(safe-area-inset-left));
 	background: #101318;
@@ -173,10 +174,29 @@ footer {
 	display: flex;
 	align-items: center;
 }
+.graduation-progress {
+	appearance: none;
+	flex: 0 0 100%;
+	width: 100%;
+	height: 6px;
+	border: 1px solid var(--line);
+	border-radius: 0;
+	background: #171d25;
+	overflow: hidden;
+}
+.graduation-progress::-webkit-progress-bar {
+	background: #171d25;
+}
+.graduation-progress::-webkit-progress-value {
+	background: var(--accent);
+}
+.graduation-progress::-moz-progress-bar {
+	background: var(--accent);
+}
 .hud {
 	position: absolute;
 	z-index: 1;
-	top: calc(56px + env(safe-area-inset-top));
+	top: calc(68px + env(safe-area-inset-top));
 	left: max(12px, env(safe-area-inset-left));
 	right: max(12px, env(safe-area-inset-right));
 	display: flex;
