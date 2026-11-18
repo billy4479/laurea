@@ -3,14 +3,13 @@ export const games = [
 		id: 1,
 		title: 'Flappy Laurea',
 		subtitle: '',
-		instructions:
-			'Tocca per saltare e passa tra gli esami. Ogni passaggio vale un CFU. Il ritmo aumenta col tempo: la linea rossa segna il traguardo. Non toccare i bordi!',
-		controls: 'Tocca lo schermo · oppure Spazio',
+		instructions: '',
+		controls: '',
 		goal: 12,
 		unit: 'CFU',
 		symbol: 'ƒ',
 		color: '#9ece6a',
-		label: 'RIFLESSI',
+		label: '',
 		victory: '12 CFU e nessuna intenzione di fermarsi.',
 		loss: 'Era solo un appello di prova.'
 	},

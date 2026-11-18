@@ -198,8 +198,11 @@
 					<a class="button secondary" href={resolve('/')}>Menu giochi</a>
 				{:else if phase === 'ready'}
 					<h2>{info.title}</h2>
-					<p>{info.instructions}</p>
-					<p><strong>{info.goal} {info.unit} per la vittoria.</strong><br />{info.controls}</p>
+					{#if info.instructions}<p>{info.instructions}</p>{/if}
+					<p>
+						<strong>{info.goal} {info.unit} per la vittoria.</strong>{#if info.controls}<br
+							/>{info.controls}{/if}
+					</p>
 					{#if runtimeError}<p role="alert">{runtimeError}</p>
 					{:else}<button class="button" onclick={start} disabled={!ready || starting}
 							>{starting ? 'un attimo…' : ready ? '[ start ]' : 'caricamento…'}</button
