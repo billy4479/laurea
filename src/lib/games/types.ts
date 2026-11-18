@@ -7,7 +7,7 @@ export interface Painter {
 	circle(x: number, y: number, radius: number, color: string): void;
 	polygon(points: Point[], color: string): void;
 	line(points: Point[], color: string, width: number): void;
-	text(value: string, x: number, y: number, size: number, color: string): void;
+	text(value: string, x: number, y: number, size: number, color: string, rotation?: number): void;
 }
 export interface Game {
 	score: number;
@@ -30,9 +30,10 @@ export function text(
 	x: number,
 	y: number,
 	size = 16,
-	color = colors.ink
+	color = colors.ink,
+	rotation = 0
 ) {
-	p.text(value, x, y, size, color);
+	p.text(value, x, y, size, color, rotation);
 }
 export function rounded(
 	p: Painter,

@@ -37,14 +37,14 @@ class PhaserPainter implements Painter {
 		this.graphics.lineStyle(width, this.color(color));
 		this.graphics.strokePoints(points);
 	}
-	text(value: string, x: number, y: number, size: number, color: string) {
+	text(value: string, x: number, y: number, size: number, color: string, rotation = 0) {
 		// BigBlue's native grid is 8×12. Avoid fractional font sizes and fake bold.
 		size = Math.max(12, Math.round(size / 12) * 12);
 		const resolution = Math.max(1, Math.ceil(this.scene.cameras.main.zoom));
 		let label = this.labels[this.used++];
 		if (!label) {
 			label = this.scene.add
-				.text(0, 0, '', { fontFamily: 'BigBlueTerminal, monospace', resolution })
+				.text(0, 0, '', { fontFamily: 'BigBlueTerminal, monospace', resolution, align: 'center' })
 				.setOrigin(0.5, 0.8);
 			label.texture.setFilter(Phaser.Textures.FilterMode.LINEAR);
 			this.labels.push(label);
@@ -53,7 +53,12 @@ class PhaserPainter implements Painter {
 		if (label.style.fontSize !== `${size}px` || label.style.color !== color) {
 			label.setStyle({ fontSize: `${size}px`, color });
 		}
-		label.setVisible(true).setPosition(x, y).setText(value);
+		label
+			.setVisible(true)
+			.setOrigin(0.5, rotation ? 0.5 : 0.8)
+			.setRotation(rotation)
+			.setPosition(x, y)
+			.setText(value);
 	}
 }
 

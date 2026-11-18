@@ -10,6 +10,8 @@ import {
 	type Painter
 } from './types';
 
+import { drawGateLabels } from './flappy-labels';
+
 type Gate = { x: number; gap: number; passed: boolean; label: string };
 export class Flappy implements Game {
 	score = 0;
@@ -20,6 +22,7 @@ export class Flappy implements Game {
 	elapsed = 0;
 	spawn = 0;
 	gates: Gate[] = [];
+	private gateCount = 0;
 	constructor(
 		private random = Math.random,
 		private height = HEIGHT
@@ -41,7 +44,7 @@ export class Flappy implements Game {
 				x: WIDTH + 10,
 				gap: 155 + this.random() * (this.height - 320),
 				passed: false,
-				label: ['ANALISI', 'ALGEBRA', 'DEADLINE', 'NaN'][this.gates.length % 4]
+				label: ['ANALISI', 'ALGEBRA', 'DEADLINE', 'NaN'][this.gateCount++ % 4]
 			});
 			this.spawn = 2.1;
 		}
@@ -69,8 +72,7 @@ export class Flappy implements Game {
 		for (const g of this.gates) {
 			rounded(ctx, g.x, -12, 60, g.gap - 91 + 12, colors.green);
 			rounded(ctx, g.x, g.gap + 91, 60, this.height - g.gap - 91 + 12, colors.green);
-			text(ctx, g.label.slice(0, 5), g.x + 30, g.gap - 120, 10, '#fff9ed');
-			text(ctx, '∑', g.x + 30, g.gap + 125, 23, '#fff9ed');
+			drawGateLabels(ctx, g.x, g.gap, this.height, g.label);
 		}
 		ctx.circle(85, this.y, 17, colors.gold);
 		cap(ctx, 85, this.y - 17, 21);
